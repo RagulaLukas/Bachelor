@@ -23,6 +23,7 @@ public class DBConnect {
     private ResultSet rs;
     private ArrayList<Admin> users = new ArrayList<>();
     private ArrayList<Question> questions;
+    private ArrayList<Score> score;
     public DBConnect() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -142,8 +143,54 @@ public class DBConnect {
         } catch (Exception e) {
             System.out.print(e);
         }
-        System.out.println(questions);
+        
         return questions;
+    }
+    
+    public ArrayList getScore() {
+        try {
+        score = new ArrayList<>();
+        String query = "SELECT * FROM points Order BY Score DESC LIMIT 3";
+        rs = st.executeQuery(query);
+        Question q;
+
+        while (rs.next()) {
+            String name = rs.getString("Name");
+            Integer points = rs.getInt("Score");
+
+            Score s = new Score(name,points);
+            score.add(s);
+        }
+        } catch (Exception e) {
+            System.out.print(e);
+        }       
+        return score;
+    }
+    
+    public class Score{
+
+        String name;
+        Integer sc;
+        public Score(String name,Integer sc){
+            this.name = name;
+            this.sc = sc;
+        }
+        
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Integer getSc() {
+            return sc;
+        }
+
+        public void setSc(Integer sc) {
+            this.sc = sc;
+        }
     }
     
 }

@@ -6,6 +6,7 @@
 package Main;
 
 import Game2D.Game;
+import Main.DBConnect.Score;
 import SideGames.Pexeso;
 
 import java.io.IOException;
@@ -46,6 +47,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import SideGames.quiz;
+import java.util.ArrayList;
 
 /**
  *
@@ -53,7 +55,7 @@ import SideGames.quiz;
  */
 
 public class MainMenu extends Application {
-    
+    private DBConnect dbc = new DBConnect();
     private Boolean admin = false;
     Stage primaryStage;
     Game game;
@@ -62,13 +64,15 @@ public class MainMenu extends Application {
     Pexeso pex;
     private User user;
     public boolean firstOne = true;
+    private Text name,score;
+    private  ImageView img;
 
     private Parent createContent() {
         root = new Pane();
         root.setPrefSize(game.GAME_WIDTH, game.GAME_HEIGHT);
            
         try (InputStream is = Files.newInputStream(Paths.get("src/main/resources/imgs/mainMenu.jpg"))) {            
-            ImageView img = new ImageView(new Image(is));
+            img = new ImageView(new Image(is));
             img.setFitHeight(game.GAME_HEIGHT);
             img.setFitWidth(game.GAME_WIDTH);
 
@@ -88,9 +92,21 @@ public class MainMenu extends Application {
         Janosik.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-                try { 
+                try {
+                   if(firstOne){
+                        firstOne = false;
+                        Dialog dialog = new Dialog();
+                        dialog.show();
+
+                        dialog.getButton().setOnAction(event ->{
+                            String meno = dialog.getTextName();
+                            user = new User(meno); 
+                            game.setUser(user);
+                            dialog.close();                        
+                    });
+        }
                      game = new Game(primaryStage);
-                     game.setUser(user);
+                     
                 } catch (Exception ex){
                     Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -128,7 +144,46 @@ public class MainMenu extends Application {
         Skore.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {  
-                System.out.println(user.getMeno());
+                
+                ArrayList<Score> scoreAl = new ArrayList<>();
+                scoreAl = dbc.getScore();
+                
+                Text scr = new Text("Traja najlepší hráči");
+                scr.setTranslateX(470);
+                scr.setTranslateY(200);
+                scr.setFont(Font.font("Ubuntu", FontWeight.SEMI_BOLD, 40)); 
+                root.getChildren().add(scr);
+                
+                
+                for (int i = 0;i < scoreAl.size(); i++) {
+                    name = new Text(scoreAl.get(i).getName());
+                    name.setTranslateX(490);
+                    name.setTranslateY(290+i*30);
+                    name.setFont(Font.font("Ubuntu", FontWeight.SEMI_BOLD, 20)); 
+                    
+                    score = new Text(""+scoreAl.get(i).getSc());
+                    score.setTranslateX(800);
+                    score.setTranslateY(290+i*30);
+                    score.setFont(Font.font("Ubuntu", FontWeight.BOLD, 20)); 
+                    
+                    root.getChildren().removeAll(title, vBox);
+                    root.getChildren().addAll(name,score);
+                }
+                
+                Button back = new Button("Do menu");
+                back.setTranslateX(800);
+                back.setTranslateY(650);
+                root.getChildren().add(back);
+                
+                back.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent t) {
+                    
+                    root.getChildren().clear(); 
+                    root.getChildren().addAll(img,title, vBox);
+                    }
+                });
+               
             }
         });
       
@@ -178,7 +233,7 @@ public class MainMenu extends Application {
  
                     @Override
                     public void handle(ActionEvent e) {
-                        DBConnect dbc = new DBConnect();
+                        
                         admin = dbc.isAdmin(userTextField.getText(),pwBox.getText());
                        
                         if(admin){
@@ -323,18 +378,6 @@ public class MainMenu extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         
-        if(firstOne){
-            firstOne = false;
-            Dialog dialog = new Dialog();
-            dialog.show();
-            
-            dialog.getButton().setOnAction(event ->{
-                String meno = dialog.getTextName();
-                user = new User(meno);
-                this.user = user;
-                dialog.close();                        
-            });
-        }
          System.gc();
     }
 
