@@ -70,16 +70,20 @@ public class MainMenu extends Application {
     private Parent createContent() {
         root = new Pane();
         root.setPrefSize(game.GAME_WIDTH, game.GAME_HEIGHT);
-           
-        try (InputStream is = Files.newInputStream(Paths.get("src/main/resources/imgs/mainMenu.jpg"))) {            
-            img = new ImageView(new Image(is));
+        
+        
+        
+       // try (InputStream is = Files.newInputStream(Paths.get("src/main/resources/imgs/mainMenu.jpg"))) {   
+ 
+            //img = new ImageView(new Image(is));
+            img = new ImageView(new Image(getClass().getResourceAsStream("/imgs/mainMenu.jpg")));
             img.setFitHeight(game.GAME_HEIGHT);
             img.setFitWidth(game.GAME_WIDTH);
 
             root.getChildren().add(img);
-        } catch (IOException e) {
+       /* } catch (IOException e) {
             System.out.print(e);
-        }
+        }*/
 
         Title title = new Title("P I S K O T");
         title.setTranslateX(475);

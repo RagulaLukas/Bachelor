@@ -113,17 +113,12 @@ public class quiz {
     private Parent createContent() {
         appRoot.getChildren().clear();
         appRoot.setPrefSize(1280, 720);
+     
+        ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/imgs/quizBG.png")));
+        img.setFitHeight(720);
+        img.setFitWidth(1280);
 
-        try (InputStream is = Files.newInputStream(Paths.get("src/main/resources/imgs/quizBG.png"))) {   
-            ImageView img = new ImageView(new Image(is));
-            img.setFitHeight(720);
-            img.setFitWidth(1280);
-
-            appRoot.getChildren().add(img);
-
-        } catch (IOException e) {
-            System.out.print(e);
-        }
+        appRoot.getChildren().add(img);       
 
         DBConnect dbc = new DBConnect();
         qs = dbc.getQuestions(category);

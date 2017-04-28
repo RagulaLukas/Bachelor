@@ -71,16 +71,11 @@ public class Pexeso {
     private Parent createContent() throws Exception{
         appRoot.setPrefSize(game.GAME_WIDTH,game.GAME_HEIGHT);
         
-        try(InputStream is = Files.newInputStream(Paths.get("src/main/resources/imgs/mainMenu.jpg"))){
-            img = new ImageView(new Image(is));
-            img.setFitHeight(game.GAME_HEIGHT);
-            img.setFitWidth(game.GAME_WIDTH);
-            
-            appRoot.getChildren().add(img);
-                    
-        }catch(IOException e){
-            System.out.print(e);
-        }
+        img = new ImageView(new Image(getClass().getResourceAsStream("/imgs/mainMenu.jpg")));
+        img.setFitHeight(game.GAME_HEIGHT);
+        img.setFitWidth(game.GAME_WIDTH);
+
+        appRoot.getChildren().add(img);
         
         Title title = new Title("P E X E S O");
         title.setTranslateX(475);
@@ -88,6 +83,7 @@ public class Pexeso {
         MainMenu.MenuBox vBox = new MainMenu.MenuBox();
                 
         File folder = new File("src/main/resources/pexeso/");
+        
         File[] listOfFiles = folder.listFiles();
         
         

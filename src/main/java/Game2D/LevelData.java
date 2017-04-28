@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -72,7 +73,12 @@ public class LevelData {
     }
     
     private void loadMaps() throws IOException{
+        //skusit cestu prilepit
+        //File folder = new File(getClass().getClassLoader().getResource("/levels/").getFile());
         File folder = new File("src/main/resources/levels/");
+       
+        System.out.println("1 "+folder);
+        //System.out.println("2 "+f);
         File[] listOfFiles = folder.listFiles();
         
          for(int i = 0; i < listOfFiles.length; i++){

@@ -28,7 +28,8 @@ public class DBConnect {
         try {
             Class.forName("com.mysql.jdbc.Driver");
 
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bcdb", "root", "");
+            //con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bcdb", "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://sql8.freesqldatabase.com:3306/sql8171518", "sql8171518", "xCwUDzEUvF");
             st = con.createStatement();
             //getUser();
             //getQuestions(1);
